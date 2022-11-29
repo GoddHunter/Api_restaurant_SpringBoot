@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -42,5 +43,14 @@ public class RestaurantController {
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public String create(@RequestBody Restaurant restaurantAcreer) {
 		return restoService.create(restaurantAcreer);
+	}
+	
+	@PutMapping("/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
+	public void update(@PathVariable("id") String identifiant, @RequestBody Restaurant restaurantMaj) {
+		if(restoService.findById(identifiant) == null) {
+			throw new ResourceNotfoundException();
+		}
+		restoService.update(identifiant, restaurantMaj);
 	}
 }
