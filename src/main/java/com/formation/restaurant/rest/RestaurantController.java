@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.formation.restaurant.exceptions.ResourceNotfoundException;
 import com.formation.restaurant.models.Restaurant;
 import com.formation.restaurant.services.RestaurantService;
+import com.formation.restaurant.util.CtrlrPrecondition;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -35,9 +36,7 @@ public class RestaurantController {
 	@GetMapping("/{id}")
 	public Restaurant findById(@PathVariable("id") String identifiant) {
 		Restaurant response = restoService.findById(identifiant);
-		if(response == null) {
-			throw new ResourceNotfoundException();
-		}
+		CtrlrPrecondition.checkFound(response);
 		return response;
 	}
 	
@@ -50,18 +49,21 @@ public class RestaurantController {
 	@PutMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public void update(@PathVariable("id") String identifiant, @RequestBody Restaurant restaurantMaj) {
-		if(restoService.findById(identifiant) == null) {
-			throw new ResourceNotfoundException();
-		}
+		CtrlrPrecondition.checkFound(restoService.findById(identifiant));
 		restoService.update(identifiant, restaurantMaj);
 	}
 	
 	@PatchMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public void partialUpdate(@PathVariable("id") String identifiant, @RequestBody Map<String, Object> updates) {
-		if(restoService.findById(identifiant) == null) {
-			throw new ResourceNotfoundException();
-		}
+		CtrlrPrecondition.checkFound(restoService.findById(identifiant));
 		restoService.partialUpdate(identifiant, updates);
+	}
+	
+	@DeleteMapping("/{id}")
+	@ResponseStatus(code = HttpStatus.OK)
+	public void deleteById(@PathVariable("id") String identifiant) {
+		CtrlrPrecondition.checkFound(restoService.findById(identifiant));
+		restoService.deleteById(identifiant);
 	}
 }
