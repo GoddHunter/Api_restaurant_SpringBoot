@@ -1,7 +1,9 @@
 package com.formation.restaurant.services.impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,22 @@ public class RestaurantServiceImpl implements RestaurantService {
 		
 		restoRepository.save(restaurantMaj);
 		
+	}
+
+	@Override
+	public void partialUpdate(String identifiant, Map<String, Object> updates) {
+		Restaurant restoToUpdate = restoRepository.findById(identifiant).get();
+		
+		for(String key : updates.keySet()) {
+			switch(key) {
+			case "nom": 
+				restoToUpdate.setNom((String) updates.get(key)); break;
+			case "adresse":
+				restoToUpdate.setAdresse((String) updates.get(key)); break;
+			}
+		
+		restoRepository.save(restoToUpdate);
+		}	
 	}
 
 }
