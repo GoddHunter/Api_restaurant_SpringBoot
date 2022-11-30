@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.hateoas.RepresentationModel;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -14,7 +15,7 @@ import jakarta.persistence.Table;
 
 @Table(name = "restaurant")
 @Entity
-public class Restaurant {
+public class Restaurant extends RepresentationModel<Restaurant>{
 	@Id
 	@GeneratedValue(generator = "system-uuid")
 	@GenericGenerator(name = "system-uuid", strategy="uuid")

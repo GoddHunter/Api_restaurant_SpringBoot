@@ -1,5 +1,7 @@
 package com.formation.restaurant.models;
 
+import java.util.Objects;
+
 import org.hibernate.annotations.GenericGenerator;
 
 import jakarta.persistence.Entity;
@@ -18,6 +20,7 @@ public class Menu {
 	private String entrees;
 	private String plats;
 	private String dessert;
+	
 	public String getIdentifiant() {
 		return identifiant;
 	}
@@ -42,5 +45,22 @@ public class Menu {
 	public void setDessert(String dessert) {
 		this.dessert = dessert;
 	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(dessert, entrees, plats);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Menu other = (Menu) obj;
+		return Objects.equals(dessert, other.dessert) && Objects.equals(entrees, other.entrees)
+				&& Objects.equals(plats, other.plats);
+	}
+	
 	
 }
